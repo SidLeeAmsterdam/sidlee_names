@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+    <title>SID LEE NAMES</title>
+    <link rel="stylesheet" href="css/main.css" media="screen">
+</head>
+<body>
+
+<div id="names" class="centered">
+    <h1></h1>
+</div>
+
+<script type="text/javascript" src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/tweenlite.min.js"></script>
+<script type="text/javascript">
+
+    var sidLeePeepz = [];
+    var intervalID = -1;
+
+    function init() {
+        $( '#names' ).height( $(window).height() + 'px' );
+        $( '#names h1' ).html( "Hit spacebar!" );
+
+        $(document).on("keyup", function(event){
+            if (event.keyCode == 32 ) {
+                $("body").removeClass("active");
+                clearInterval(intervalID);
+                randomize();
+            }
+        })
+    }
+
+    function initalizeNames() {
+        sidLeePeepz = [
+            "Ali Ronca",
+            "Amy Manganiello",
+            "Andrew Peet",
+            "Ashley Liaw",
+            "Brad Kent",
+            "Caroline Koopmans",
+            "Christel Liaw",
+            "Christy Colon",
+            "Dannika Coleman",
+            "Darden Longenecker",
+            "Demelza Rafferty",
+            "Dovile Banyte",
+            "Emily Creek",
+            "Eoin McLaughlin",
+            //"Frank van Rooijen", presented august 15
+            "Henrik Leichsenring",
+            "James Yeats Smith",
+            "Jette van der Made",
+            "Justin Townsend",
+            "Laura van der Heiden",
+            "Leana Budico",
+            "Mac MacDonald",
+            "Maggie Chok",
+            "Marieke Bremer",
+            "Nicola Davies",
+            "Nora Qiang",
+            //"Owen van Dijk", holidays
+            "Rachel Perry",
+            "Richie Hendo",
+            "Sahil Nathu",
+            "Sanne van Hattum",
+            "Sarah Litwin-Schmid",
+            "Simon Wassef",
+            //"Sofia Gillstrom", presented august 29
+            "Sophie Piso",
+            "Thom Glover",
+            "Thomas Schenk",
+            "Varia Makagonova"
+        ];
+    }
+
+    function randomize() {
+
+        for (var i = 0; i < sidLeePeepz.length; i++) {
+            sidLeePeepz.sort(function(){return (4*Math.random()>2)?1:-1});
+            console.log(sidLeePeepz);
+        }
+
+        var sidLeeName =  { value: 0 };
+        var iterations = 100;
+
+        TweenLite.to( sidLeeName,  10, {
+                    ease:Cubic.easeOut,
+                    timeScale: 2,
+                    value: sidLeePeepz.length*iterations,
+                    onUpdate:function() {
+                        $( '#names h1' ).html( sidLeePeepz[Math.round(sidLeeName.value/iterations)-1] );
+                    },
+                    onComplete:function() {
+                        console.log($( '#names h1' ).html() );
+                        intervalID = setInterval(function(){
+                            if ( $("body").hasClass("active")){
+                                $("body").removeClass("active");
+                            } else {
+                                $("body").addClass("active");
+                            };
+                        },200);
+                    }
+                });
+    }
+
+    function removeName(name) {
+
+    }
+
+    init();
+    initalizeNames();
+</script>
+
+</body>
+</html>
