@@ -18,6 +18,7 @@
 
     var sidLeePeepz = [];
     var intervalID = -1;
+    var tweenTime = 3; //time in seconds
 
     function init() {
         $( '#names' ).height( $(window).height() + 'px' );
@@ -27,7 +28,12 @@
             if (event.keyCode == 32 ) {
                 $("body").removeClass("active");
                 clearInterval(intervalID);
-                randomize();
+
+                if (sidLeePeepz.length > 0) {
+                    randomize();
+                } else {
+                    $( '#names h1' ).html("All names drawn!")
+                }
             }
         })
     }
@@ -85,28 +91,39 @@
         var sidLeeName =  { value: 0 };
         var iterations = 100;
 
-        TweenLite.to( sidLeeName,  10, {
+        TweenLite.to( sidLeeName, tweenTime, {
                     ease:Cubic.easeOut,
-                    timeScale: 2,
+                    timeScale: 3,
                     value: sidLeePeepz.length*iterations,
                     onUpdate:function() {
                         $( '#names h1' ).html( sidLeePeepz[Math.round(sidLeeName.value/iterations)-1] );
                     },
                     onComplete:function() {
                         console.log($( '#names h1' ).html() );
-                        intervalID = setInterval(function(){
-                            if ( $("body").hasClass("active")){
-                                $("body").removeClass("active");
-                            } else {
-                                $("body").addClass("active");
-                            };
-                        },200);
+                        highlightName();
+                        removeName( $( '#names h1' ).html() );
+                        lowerTweenTime();
                     }
                 });
     }
 
     function removeName(name) {
+        sidLeePeepz = sidLeePeepz.filter(function(e){return e!==name})
+        console.log(name, sidLeePeepz);
+    }
 
+    function highlightName() {
+        intervalID = setInterval(function(){
+            if ( $("body").hasClass("active")){
+                $("body").removeClass("active");
+            } else {
+                $("body").addClass("active");
+            };
+        },200);
+    }
+
+    function lowerTweenTime() {
+        tweenTime *= 0.98;
     }
 
     init();
